@@ -10,10 +10,12 @@ afterAll(() => db.end());
 describe('GET /api/categories', () => {
     test('returns a correctly formatted category object', () => {
         return request(app).get('/api/categories').expect(200).then((response) => {
-            expect(response.body.categories[0]).toMatchObject({
-                slug: expect.any(String),
-                description: expect.any(String)
-            });
+            response['body']['categories'].forEach(category => {
+                expect(category).toMatchObject({
+                    slug: expect.any(String),
+                    description: expect.any(String)
+                });
+            })
         })
     });
     test('returns a category object of the correct length', () => {

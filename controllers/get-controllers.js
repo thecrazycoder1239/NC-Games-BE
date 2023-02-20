@@ -7,8 +7,3 @@ exports.fetchCategories = (req, res, next) => {
         next(err);
     }) 
 }
-
-exports.invalidRoute = (req, res, next) => {
-    const url = req.url
-    next(url);
-}
