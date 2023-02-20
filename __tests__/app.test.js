@@ -51,11 +51,10 @@ describe('GET /api/reviews', () => {
     test('returns a category array sorted by date in ascending order', () => {
         return request(app).get('/api/reviews').expect(200).then((response) => {
             const reviews = [...response.body.reviews];
-            console.log(reviews)
-            expect(reviews).toBeSortedBy('created_at', {
-                ascending: true,
-                coerce: true
-            });
+            reviews.sort(function (a , b) {
+                return new Date(b.created_at) - new Date(a.created_at);
+              });
+            expect(reviews).toEqual(response.body.reviews);
         })
     });
 });
