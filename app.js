@@ -1,12 +1,16 @@
 const express = require('express');
 const app = express();
-const { fetchCategories } = require('./controllers/get-controllers');
-const { handles404, handleServerErrors } = require('./error-handlers');
+const { fetchCategories, fetchReviews } = require('./controllers/get-controllers');
+const { handleServerErrors } = require('./error-handlers');
 
-app.use(express.json());
+// app.use(express.json());
 
 app.get('/api/categories', fetchCategories);
 
+app.get('/api/reviews', fetchReviews)
+
+
+// make this generic, not just for get method
 app.get('/*', function (req, res) {
     res.status(404).send({ msg : 'route does not exist'})
 })
