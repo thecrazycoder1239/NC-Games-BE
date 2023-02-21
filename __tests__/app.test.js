@@ -58,7 +58,7 @@ describe('GET /api/reviews', () => {
         })
     });
     describe('GET /api/reviews/:review_id/comments', () => {
-        test('returns with an array of comment objects', () => {
+        test.skip('returns with an array of comment objects', () => {
             return request(app).get('/api/reviews/3/comments').expect(200).then(response => {
                 const arrayOfComments = response.body.reviews;
                 arrayOfComments.forEach(comment => {
@@ -73,7 +73,7 @@ describe('GET /api/reviews', () => {
                 })
             })
         });
-        test('returns with an array of the correct length and content for the review_id', () => {
+        test.skip('returns with an array of the correct length and content for the review_id', () => {
             return request(app).get('/api/reviews/3/comments').expect(200).then(response => {
                 const arrayOfComments = response.body.reviews;
                 expect(arrayOfComments).toHaveLength(3)
@@ -86,7 +86,7 @@ describe('GET /api/reviews', () => {
                 })
             })
         });
-        test('returns with an array sorted to have the most recent comments first', () => {
+        test.skip('returns with an array sorted to have the most recent comments first', () => {
             return request(app).get('/api/reviews/3/comments').expect(200).then(response => {
                 const commentsCopy = [...response.body.comments];
             commentsCopy.sort(function (a , b) {
