@@ -58,9 +58,9 @@ describe('GET /api/reviews', () => {
         })
     });
     describe('GET /api/reviews/:review_id/comments', () => {
-        test.skip('returns with an array of comment objects', () => {
+        test('returns with an array of comment objects', () => {
             return request(app).get('/api/reviews/3/comments').expect(200).then(response => {
-                const arrayOfComments = response.body.reviews;
+                const arrayOfComments = response.body.comments;
                 arrayOfComments.forEach(comment => {
                     expect(comment).toMatchObject({
                         comment_id: expect.any(Number),
@@ -73,21 +73,23 @@ describe('GET /api/reviews', () => {
                 })
             })
         });
-        test.skip('returns with an array of the correct length and content for the review_id', () => {
+        test('returns with an array of the correct length and content for the review_id', () => {
             return request(app).get('/api/reviews/3/comments').expect(200).then(response => {
-                const arrayOfComments = response.body.reviews;
+                const arrayOfComments = response.body.comments;
                 expect(arrayOfComments).toHaveLength(3)
                 expect(arrayOfComments[0]).toMatchObject({
-                    body: 'EPIC board game!',
-                    votes: 16,
-                    author: 'bainesface',
-                    review_id: 2,
-                    created_at: new Date(1511354163389),
-                })
+                    comment_id: 6,
+                    body: 'Not sure about dogs, but my cat likes to get involved with board games, the boxes are their particular favourite',
+                    review_id: 3,
+                    author: 'philippaclaire9',
+                    votes: 10,
+                    created_at: '2021-03-27T19:49:48.110Z'
+                  })
             })
         });
-        test.skip('returns with an array sorted to have the most recent comments first', () => {
+        test('returns with an array sorted to have the most recent comments first', () => {
             return request(app).get('/api/reviews/3/comments').expect(200).then(response => {
+                console.log(response.body.comments)
                 const commentsCopy = [...response.body.comments];
             commentsCopy.sort(function (a , b) {
                 return new Date(b.created_at) - new Date(a.created_at);
