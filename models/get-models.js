@@ -12,3 +12,12 @@ exports.fetchedReviews = () => {
         return response.rows;
     })
 }
+
+exports.fetchedReview = (review_id) => {
+    return db.query(`SELECT * FROM reviews WHERE review_id = $1`, [review_id]).then(response => {
+        if (response['rows'].length === 0) {
+            return Promise.reject('review not found');
+        }
+        return response.rows[0];
+    })
+}
