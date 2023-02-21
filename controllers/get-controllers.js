@@ -1,4 +1,4 @@
-const { fetchedCategories, fetchedReviews, fetchedComments } = require('../models/get-models');
+const { fetchedCategories, fetchedReviews, fetchedComments, fetchedReview, selectReviewsById } = require('../models/get-models');
 
 exports.fetchCategories = (req, res, next) => {
     fetchedCategories().then(categories => {
@@ -18,8 +18,19 @@ exports.fetchReviews = (req, res, next) => {
 
 exports.fetchComments = (req, res, next) => {
     const { review_id } = req.params;
-    fetchedComments(review_id).then(comments => {
+    const checkForId = selectReviewsById(review_id)
+    const fetchComments = fetchedComments(review_id)
+    Promise.all([fetchComments, checkForId]).then(([comments]) => {
         res.status(200).send({ comments })
+    }).catch(err => {
+        next(err)
+    })
+}
+
+exports.fetchReview = (req, res, next) => {
+    const { review_id } = req.params;
+    fetchedReview( review_id ).then(review => {
+        res.status(200).send({ review });
     }).catch(err => {
         next(err);
     })
