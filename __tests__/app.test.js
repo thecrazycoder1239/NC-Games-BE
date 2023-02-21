@@ -90,6 +90,18 @@ describe('GET /api/reviews', () => {
     });
 });
 
+describe.skip('POST /api/reviews/:review_id/comments', () => {
+    test('returns an object of the posted comment', () => {
+        return request(app).post('/api/reviews/5/comments').send({ username: 'WalterWhite', body: 'I hate this game, waste of my time'}).expect(201).then(response => {
+            const comment = response.body.comment;
+            expect(comment).toMatchObject({
+                author: 'WalterWhite', 
+                body: 'I hate this game, waste of my time'
+            })
+        })
+    });
+});
+
 describe('error handling', () => {
     test('returns 404 if path is not found', () => {
         return request(app).get('/api/notARoute').expect(404).then((response) => {
