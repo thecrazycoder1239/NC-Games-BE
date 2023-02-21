@@ -61,7 +61,7 @@ describe('GET /api/reviews', () => {
         test('responds with a review object', () => {
             return request(app).get('/api/reviews/1').expect(200).then((response) => {
                 expect(response.body.review).toMatchObject({
-                    review_id : expect.any(Number),
+                    review_id : 1,
                     title: expect.any(String),
                     review_body: expect.any(String),
                     designer: expect.any(String),
