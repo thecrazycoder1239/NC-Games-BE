@@ -89,7 +89,6 @@ describe('GET /api/reviews', () => {
         });
         test('returns with an array sorted to have the most recent comments first', () => {
             return request(app).get('/api/reviews/3/comments').expect(200).then(response => {
-                console.log(response.body.comments)
                 const commentsCopy = [...response.body.comments];
             commentsCopy.sort(function (a , b) {
                 return new Date(b.created_at) - new Date(a.created_at);
