@@ -90,6 +90,23 @@ describe('GET /api/reviews', () => {
     });
 });
 
+describe.skip('PATCH /api/reviews/review_id', () => {
+    test('returns with an updated review, with votes incrimented by newVote', () => {
+        return request(app).patch('/api/reviews/1').send({ inc_votes: 1 }).expect(200).then((response) => {
+            expect(response.body.review).toMatchObject({
+                title: 'Agricola',
+                designer: 'Uwe Rosenberg',
+                owner: 'mallionaire',
+                review_img_url: 'https://images.pexels.com/photos/974314/pexels-photo-974314.jpeg?w=700&h=700',
+                review_body: 'Farmyard fun!',
+                category: 'euro game',
+                created_at: expect.any(String),
+                votes: 2
+            })
+        })
+    });
+});
+
 describe('error handling', () => {
     test('returns 404 if path is not found', () => {
         return request(app).get('/api/notARoute').expect(404).then((response) => {

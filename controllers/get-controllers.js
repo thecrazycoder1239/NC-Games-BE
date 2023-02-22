@@ -24,3 +24,10 @@ exports.fetchReview = (req, res, next) => {
         next(err);
     })
 }
+
+exports.patchReview = (req, res, next) => {
+    console.log(req.query)
+    const { inc_votes } = req.body;
+    const { review_id } = req.params;
+    console.log(inc_votes + review_id)
+}
