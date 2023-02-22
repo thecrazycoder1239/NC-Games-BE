@@ -2,7 +2,7 @@ exports.handlesInvalidPath = (req, res, next) => {
     res.status(404).send({ msg: 'path not found'});
 }
 
-exports.handlesCustom404Errors = (err, req, res, next) => {
+exports.handles404Errors = (err, req, res, next) => {
     if(err === 'review not found') {
         res.status(404).send({ msg: 'review not found'})
     } else if (err.code === '23503') {
@@ -19,6 +19,8 @@ exports.handles400Errors = (err, req, res, next) => {
         res.status(400).send({ msg: 'invalid input'})
     } else if(err.code === '23502') {
         res.status(400).send({ msg: 'missing required input'})
+    } else if(err === 'invalid type of incriment votes') {
+        res.status(400).send({ msg: 'invalid type of incriment votes'})
     } else {
         next(err);
     }

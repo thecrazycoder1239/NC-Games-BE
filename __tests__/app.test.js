@@ -137,10 +137,10 @@ describe('GET /api/reviews', () => {
     });
 });
 
-describe.skip('PATCH /api/reviews/review_id', () => {
+describe('PATCH /api/reviews/review_id', () => {
     test('returns with an updated review, with votes incrimented by newVote', () => {
         return request(app).patch('/api/reviews/1').send({ inc_votes: 1 }).expect(200).then((response) => {
-            expect(response.body.review).toMatchObject({
+            expect(response.body.updatedReview).toMatchObject({
                 title: 'Agricola',
                 designer: 'Uwe Rosenberg',
                 owner: 'mallionaire',
@@ -149,6 +149,34 @@ describe.skip('PATCH /api/reviews/review_id', () => {
                 category: 'euro game',
                 created_at: expect.any(String),
                 votes: 2
+            })
+        })
+    });
+    test('returns 200 with a not updated review if given no values', () => {
+        return request(app).patch('/api/reviews/1').send({ }).expect(200).then((response) => {
+            expect(response.body.updatedReview).toMatchObject({
+                title: 'Agricola',
+                designer: 'Uwe Rosenberg',
+                owner: 'mallionaire',
+                review_img_url: 'https://images.pexels.com/photos/974314/pexels-photo-974314.jpeg?w=700&h=700',
+                review_body: 'Farmyard fun!',
+                category: 'euro game',
+                created_at: expect.any(String),
+                votes: 1
+            })
+        })
+    });
+    test('returns 200 with a not updated review if given the wrong key', () => {
+        return request(app).patch('/api/reviews/1').send({ timeOfYear: 'winter' }).expect(200).then((response) => {
+            expect(response.body.updatedReview).toMatchObject({
+                title: 'Agricola',
+                designer: 'Uwe Rosenberg',
+                owner: 'mallionaire',
+                review_img_url: 'https://images.pexels.com/photos/974314/pexels-photo-974314.jpeg?w=700&h=700',
+                review_body: 'Farmyard fun!',
+                category: 'euro game',
+                created_at: expect.any(String),
+                votes: 1
             })
         })
     });
@@ -222,6 +250,11 @@ describe('error handling', () => {
     test('returns a 404 if review_id is out of range when searching for comments', () => {
         return request(app).get('/api/reviews/999/comments').expect(404).then((response) => {
             expect(response._body.msg).toBe('review id not found')
+        })
+    });
+    test('returns a 400 if inc_votes is not a number', () => {
+        return request(app).patch('/api/reviews/1').send({ inc_votes: 'hello' }).expect(400).then((response) => {
+            expect(response.body.msg).toBe('invalid type of incriment votes')
         })
     });
 });
