@@ -29,6 +29,6 @@ exports.postedComment = (comment, review_id) => {
     data.push(review_id)
     
     return db.query(`INSERT INTO comments (author, body, review_id) VALUES ($1, $2, $3) RETURNING *`, data).then(response => {
-        return response.rows;
+        return response.rows[0];
     })
 }
