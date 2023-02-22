@@ -138,7 +138,7 @@ describe('GET /api/reviews', () => {
 });
 
 describe('PATCH /api/reviews/review_id', () => {
-    test('returns with an updated review, with votes incrimented by newVote', () => {
+    test('returns with an updated review, with votes incremented by newVote', () => {
         return request(app).patch('/api/reviews/1').send({ inc_votes: 1 }).expect(200).then((response) => {
             expect(response.body.updatedReview).toMatchObject({
                 title: 'Agricola',
