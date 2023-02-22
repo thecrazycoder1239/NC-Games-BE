@@ -90,7 +90,7 @@ describe('GET /api/reviews', () => {
     });
 });
 
-describe.skip('PATCH /api/reviews/review_id', () => {
+describe.only('PATCH /api/reviews/review_id', () => {
     test('returns with an updated review, with votes incrimented by newVote', () => {
         return request(app).patch('/api/reviews/1').send({ inc_votes: 1 }).expect(200).then((response) => {
             expect(response.body.review).toMatchObject({
