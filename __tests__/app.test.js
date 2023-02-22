@@ -137,6 +137,51 @@ describe('GET /api/reviews', () => {
     });
 });
 
+describe('PATCH /api/reviews/review_id', () => {
+    test('returns with an updated review, with votes incremented by newVote', () => {
+        return request(app).patch('/api/reviews/1').send({ inc_votes: 1 }).expect(200).then((response) => {
+            expect(response.body.updatedReview).toMatchObject({
+                title: 'Agricola',
+                designer: 'Uwe Rosenberg',
+                owner: 'mallionaire',
+                review_img_url: 'https://images.pexels.com/photos/974314/pexels-photo-974314.jpeg?w=700&h=700',
+                review_body: 'Farmyard fun!',
+                category: 'euro game',
+                created_at: expect.any(String),
+                votes: 2
+            })
+        })
+    });
+    test('returns 200 with a not updated review if given no values', () => {
+        return request(app).patch('/api/reviews/1').send({ }).expect(200).then((response) => {
+            expect(response.body.updatedReview).toMatchObject({
+                title: 'Agricola',
+                designer: 'Uwe Rosenberg',
+                owner: 'mallionaire',
+                review_img_url: 'https://images.pexels.com/photos/974314/pexels-photo-974314.jpeg?w=700&h=700',
+                review_body: 'Farmyard fun!',
+                category: 'euro game',
+                created_at: expect.any(String),
+                votes: 1
+            })
+        })
+    });
+    test('returns 200 with a not updated review if given the wrong key', () => {
+        return request(app).patch('/api/reviews/1').send({ timeOfYear: 'winter' }).expect(200).then((response) => {
+            expect(response.body.updatedReview).toMatchObject({
+                title: 'Agricola',
+                designer: 'Uwe Rosenberg',
+                owner: 'mallionaire',
+                review_img_url: 'https://images.pexels.com/photos/974314/pexels-photo-974314.jpeg?w=700&h=700',
+                review_body: 'Farmyard fun!',
+                category: 'euro game',
+                created_at: expect.any(String),
+                votes: 1
+            })
+        })
+    });
+});
+
 describe('POST /api/reviews/:review_id/comments', () => {
     test('returns an object of the posted comment', () => {
         return request(app).post('/api/reviews/5/comments').send({ username: 'philippaclaire9', body: 'I hate this game, waste of my time'}).expect(201).then(response => {
@@ -205,6 +250,21 @@ describe('error handling', () => {
     test('returns a 404 if review_id is out of range when searching for comments', () => {
         return request(app).get('/api/reviews/999/comments').expect(404).then((response) => {
             expect(response._body.msg).toBe('review id not found')
+        })
+    });
+    test('returns a 400 if inc_votes is not a number', () => {
+        return request(app).patch('/api/reviews/1').send({ inc_votes: 'hello' }).expect(400).then((response) => {
+            expect(response.body.msg).toBe('invalid type of incriment votes')
+        })
+    });
+    test('returns a 400 if review_id is invalid on a patch', () => {
+        return request(app).patch('/api/reviews/banana').send({ inc_votes: 1 }).expect(400).then((response) => {
+            expect(response.body.msg).toBe('invalid input')
+        })
+    });
+    test('returns a 404 if review_id is not found on a patch', () => {
+        return request(app).patch('/api/reviews/999').send({ inc_votes: 1 }).expect(404).then((response) => {
+            expect(response.body.msg).toBe('review id not found')
         })
     });
 });

@@ -56,3 +56,19 @@ exports.selectReviewsById = (review_id) => {
         }
     })
 } 
+
+exports.patchedReview = (increment, review_id) => {
+    if(typeof increment === 'number') {
+        const values = [increment, review_id];
+        return db.query(`UPDATE reviews SET votes = votes + $1 WHERE review_id = $2 RETURNING *`, values).then(response => {
+        return response.rows[0];
+    })
+    } else if (increment !== undefined) {
+        return Promise.reject('invalid type of incriment votes')
+    } else { 
+    const values = [review_id];
+    return db.query(`SELECT * FROM reviews WHERE review_id = $1`, values).then(response => {
+        return response.rows[0];
+    })
+    }
+}

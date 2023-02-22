@@ -1,4 +1,4 @@
-const { fetchedCategories, fetchedReviews, fetchedComments, fetchedReview, selectReviewsById, postedComment } = require('../models/get-models');
+const { fetchedCategories, fetchedReviews, fetchedComments, fetchedReview, selectReviewsById, postedComment, patchedReview } = require('../models/get-models');
 
 exports.fetchCategories = (req, res, next) => {
     fetchedCategories().then(categories => {
@@ -33,6 +33,18 @@ exports.fetchReview = (req, res, next) => {
         res.status(200).send({ review });
     }).catch(err => {
         next(err);
+    })
+}
+
+exports.patchReview = (req, res, next) => { 
+    const increment = req.body.inc_votes
+    const { review_id } = req.params;
+    const checkForId = selectReviewsById(review_id)
+    const patchedReviewPromise = patchedReview(increment, review_id)
+    Promise.all([patchedReviewPromise, checkForId]).then(([updatedReview]) => {
+        res.status(200).send({ updatedReview })
+    }).catch(err => {
+        next(err)
     })
 }
 
