@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const { fetchCategories, fetchReviews, fetchReview, postComment } = require('./controllers/get-controllers');
+const { fetchCategories, fetchReviews, fetchReview, postComment, fetchComments } = require('./controllers/get-controllers');
 const { handlesServerErrors, handlesInvalidPath, handlesCustom404Errors, handles400Errors } = require('./error-handlers');
 
 app.use(express.json());
@@ -8,6 +8,8 @@ app.use(express.json());
 app.get('/api/categories', fetchCategories);
 
 app.get('/api/reviews', fetchReviews);
+
+app.get('/api/reviews/:review_id/comments', fetchComments)
 
 app.get('/api/reviews/:review_id', fetchReview);
 

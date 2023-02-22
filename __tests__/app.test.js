@@ -57,6 +57,53 @@ describe('GET /api/reviews', () => {
             expect(reviews).toEqual(response.body.reviews);
         })
     });
+    describe('GET /api/reviews/:review_id/comments', () => {
+        test('returns with an array of comment objects', () => {
+            return request(app).get('/api/reviews/3/comments').expect(200).then(response => {
+                const arrayOfComments = response.body.comments;
+                arrayOfComments.forEach(comment => {
+                    expect(comment).toMatchObject({
+                        comment_id: expect.any(Number),
+                        votes: expect.any(Number),
+                        created_at: expect.any(String),
+                        author: expect.any(String),
+                        body: expect.any(String),
+                        review_id: expect.any(Number)
+                    })
+                })
+            })
+        });
+        test('returns with an array of the correct length and content for the review_id', () => {
+            return request(app).get('/api/reviews/3/comments').expect(200).then(response => {
+                const arrayOfComments = response.body.comments;
+                expect(arrayOfComments).toHaveLength(3)
+                expect(arrayOfComments[0]).toMatchObject({
+                    comment_id: 6,
+                    body: 'Not sure about dogs, but my cat likes to get involved with board games, the boxes are their particular favourite',
+                    review_id: 3,
+                    author: 'philippaclaire9',
+                    votes: 10,
+                    created_at: '2021-03-27T19:49:48.110Z'
+                  })
+            })
+        });
+        test('returns with an array sorted to have the most recent comments first', () => {
+            return request(app).get('/api/reviews/3/comments').expect(200).then(response => {
+                const commentsCopy = [...response.body.comments];
+            commentsCopy.sort(function (a , b) {
+                return new Date(b.created_at) - new Date(a.created_at);
+              });
+            expect(commentsCopy).toEqual(response.body.comments);
+            })
+        });
+        test('returns 200 and empty array if there are no comments for the review id', () => {
+            return request(app).get('/api/reviews/1/comments').expect(200).then(response => {
+                const arrayOfComments = response.body.comments;
+                expect(arrayOfComments).toHaveLength(0)
+                expect(arrayOfComments).toEqual([]);
+            })
+        });
+    });
     describe('GET /api/reviews/:review_id', () => {
         test('responds with a review object', () => {
             return request(app).get('/api/reviews/1').expect(200).then((response) => {
@@ -125,12 +172,17 @@ describe('error handling', () => {
             expect(response._body.msg).toBe('path not found')
         })
     });
-    test('returns a 400 if review_id is invalid', () => {
+    test('returns a 400 if review_id is invalid when searching for reviews', () => {
         return request(app).get('/api/reviews/banana').expect(400).then((response) => {
             expect(response._body.msg).toBe('invalid input')
         })
     });
-    test('returns a 404 if review_id is out of range', () => {
+    test('returns a 400 if review_id is invalid when searching for comments', () => {
+        return request(app).get('/api/reviews/banana/comments').expect(400).then((response) => {
+            expect(response._body.msg).toBe('invalid input')
+        })
+    });
+    test('returns a 404 if review_id is out of range when searching for reviews', () => {
         return request(app).get('/api/reviews/999').expect(404).then((response) => {
             expect(response._body.msg).toBe('review not found')
         })
@@ -148,6 +200,11 @@ describe('error handling', () => {
     test('returns 400 if their are missing properties on a post request', () => {
         return request(app).post('/api/reviews/999/comments').send({ username: 'philippaclaire9'}).expect(400).then((response) => {
             expect(response._body.msg).toBe('missing required input')
+        })
+    });
+    test('returns a 404 if review_id is out of range when searching for comments', () => {
+        return request(app).get('/api/reviews/999/comments').expect(404).then((response) => {
+            expect(response._body.msg).toBe('review id not found')
         })
     });
 });

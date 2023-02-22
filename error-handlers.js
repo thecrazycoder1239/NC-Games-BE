@@ -7,8 +7,10 @@ exports.handlesCustom404Errors = (err, req, res, next) => {
         res.status(404).send({ msg: 'review not found'})
     } else if (err.code === '23503') {
         res.status(404).send({ msg: '404: could not find matches in database for your input'})
-    } else {
-        next(err);
+    } else if (err === 'review id not found') {
+        res.status(404).send({ msg: 'review id not found'})
+    } else { 
+    next(err);
     }
 }
 
