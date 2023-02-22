@@ -90,14 +90,18 @@ describe('GET /api/reviews', () => {
     });
 });
 
-describe.skip('POST /api/reviews/:review_id/comments', () => {
+describe('POST /api/reviews/:review_id/comments', () => {
     test('returns an object of the posted comment', () => {
-        return request(app).post('/api/reviews/5/comments').send({ username: 'WalterWhite', body: 'I hate this game, waste of my time'}).expect(201).then(response => {
+        return request(app).post('/api/reviews/5/comments').send({ username: 'philippaclaire9', body: 'I hate this game, waste of my time'}).expect(201).then(response => {
             const comment = response.body.comment;
-            expect(comment).toMatchObject({
-                author: 'WalterWhite', 
-                body: 'I hate this game, waste of my time'
-            })
+            expect(comment).toMatchObject([{
+                author: 'philippaclaire9', 
+                body: 'I hate this game, waste of my time',
+                comment_id: 7,
+                created_at: expect.any(String), 
+                review_id: 5, 
+                votes: 0
+            }])
         })
     });
 });
@@ -110,12 +114,17 @@ describe('error handling', () => {
     });
     test('returns a 400 if review_id is invalid', () => {
         return request(app).get('/api/reviews/banana').expect(400).then((response) => {
-            expect(response._body.msg).toBe('review id invalid')
+            expect(response._body.msg).toBe('invalid input')
         })
     });
     test('returns a 404 if review_id is out of range', () => {
         return request(app).get('/api/reviews/999').expect(404).then((response) => {
             expect(response._body.msg).toBe('review not found')
+        })
+    });
+    test('returns a 400 if passed an invalid username', () => {
+        return request(app).post('/api/reviews/WalterWhite/comments').expect(400).then((response) => {
+            expect(response._body.msg).toBe('invalid input')
         })
     });
 });

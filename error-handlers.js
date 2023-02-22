@@ -11,7 +11,7 @@ exports.handlesCustom404Errors = (err, req, res, next) => {
 
 exports.handles400Errors = (err, req, res, next) => {
     if(err.code === '22P02') {
-        res.status(400).send({ msg: 'review id invalid'})
+        res.status(400).send({ msg: 'invalid input'})
     }
     next(err);
 }
