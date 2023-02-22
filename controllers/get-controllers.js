@@ -39,7 +39,9 @@ exports.fetchReview = (req, res, next) => {
 exports.patchReview = (req, res, next) => { 
     const incriment = req.body.inc_votes
     const { review_id } = req.params;
-    patchedReview(incriment, review_id).then(updatedReview => {
+    const checkForId = selectReviewsById(review_id)
+    const patchedReviewPromise = patchedReview(incriment, review_id)
+    Promise.all([patchedReviewPromise, checkForId]).then(([updatedReview]) => {
         res.status(200).send({ updatedReview })
     }).catch(err => {
         next(err)

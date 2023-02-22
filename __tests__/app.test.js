@@ -257,4 +257,14 @@ describe('error handling', () => {
             expect(response.body.msg).toBe('invalid type of incriment votes')
         })
     });
+    test('returns a 400 if review_id is invalid on a patch', () => {
+        return request(app).patch('/api/reviews/banana').send({ inc_votes: 1 }).expect(400).then((response) => {
+            expect(response.body.msg).toBe('invalid input')
+        })
+    });
+    test('returns a 404 if review_id is not found on a patch', () => {
+        return request(app).patch('/api/reviews/999').send({ inc_votes: 1 }).expect(404).then((response) => {
+            expect(response.body.msg).toBe('review id not found')
+        })
+    });
 });
