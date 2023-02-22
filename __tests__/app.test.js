@@ -137,6 +137,35 @@ describe('GET /api/reviews', () => {
     });
 });
 
+describe('POST /api/reviews/:review_id/comments', () => {
+    test('returns an object of the posted comment', () => {
+        return request(app).post('/api/reviews/5/comments').send({ username: 'philippaclaire9', body: 'I hate this game, waste of my time'}).expect(201).then(response => {
+            const comment = response.body.comment;
+            expect(comment).toMatchObject({
+                author: 'philippaclaire9', 
+                body: 'I hate this game, waste of my time',
+                comment_id: 7,
+                created_at: expect.any(String), 
+                review_id: 5, 
+                votes: 0
+            })
+        })
+    });
+    test('returns a 201 with irrelevant properties ignored on the .send', () => {
+        return request(app).post('/api/reviews/5/comments').send({ title: 'Mrs', username: 'philippaclaire9', body: 'I hate this game, waste of my time', rating: 2}).expect(201).then(response => {
+            const comment = response.body.comment;
+            expect(comment).toMatchObject({
+                author: 'philippaclaire9', 
+                body: 'I hate this game, waste of my time',
+                comment_id: 7,
+                created_at: expect.any(String), 
+                review_id: 5, 
+                votes: 0
+            })
+        })
+    });
+});
+
 describe('error handling', () => {
     test('returns 404 if path is not found', () => {
         return request(app).get('/api/notARoute').expect(404).then((response) => {
@@ -145,17 +174,32 @@ describe('error handling', () => {
     });
     test('returns a 400 if review_id is invalid when searching for reviews', () => {
         return request(app).get('/api/reviews/banana').expect(400).then((response) => {
-            expect(response._body.msg).toBe('review id invalid')
+            expect(response._body.msg).toBe('invalid input')
         })
     });
     test('returns a 400 if review_id is invalid when searching for comments', () => {
         return request(app).get('/api/reviews/banana/comments').expect(400).then((response) => {
-            expect(response._body.msg).toBe('review id invalid')
+            expect(response._body.msg).toBe('invalid input')
         })
     });
     test('returns a 404 if review_id is out of range when searching for reviews', () => {
         return request(app).get('/api/reviews/999').expect(404).then((response) => {
             expect(response._body.msg).toBe('review not found')
+        })
+    });
+    test('returns a 400 if passed an invalid username', () => {
+        return request(app).post('/api/reviews/WalterWhite/comments').send({ username: 'philippaclaire9', body: 'I hate this game, waste of my time'}).expect(400).then((response) => {
+            expect(response._body.msg).toBe('invalid input')
+        })
+    });
+    test('returns a 404 for a non-existent id', () => {
+        return request(app).post('/api/reviews/999/comments').send({ username: 'philippaclaire9', body: 'I hate this game, waste of my time'}).expect(404).then((response) => {
+            expect(response._body.msg).toBe('404: could not find matches in database for your input')
+        })
+    });
+    test('returns 400 if their are missing properties on a post request', () => {
+        return request(app).post('/api/reviews/999/comments').send({ username: 'philippaclaire9'}).expect(400).then((response) => {
+            expect(response._body.msg).toBe('missing required input')
         })
     });
     test('returns a 404 if review_id is out of range when searching for comments', () => {
