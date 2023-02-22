@@ -1,4 +1,4 @@
-const { fetchedCategories, fetchedReviews, fetchedReview } = require('../models/get-models');
+const { fetchedCategories, fetchedReviews, fetchedComments, fetchedReview, selectReviewsById, postedComment } = require('../models/get-models');
 
 exports.fetchCategories = (req, res, next) => {
     fetchedCategories().then(categories => {
@@ -16,6 +16,17 @@ exports.fetchReviews = (req, res, next) => {
     })
 }
 
+exports.fetchComments = (req, res, next) => {
+    const { review_id } = req.params;
+    const checkForId = selectReviewsById(review_id)
+    const fetchComments = fetchedComments(review_id)
+    Promise.all([fetchComments, checkForId]).then(([comments]) => {
+        res.status(200).send({ comments })
+    }).catch(err => {
+        next(err)
+    })
+}
+
 exports.fetchReview = (req, res, next) => {
     const { review_id } = req.params;
     fetchedReview( review_id ).then(review => {
@@ -27,6 +38,15 @@ exports.fetchReview = (req, res, next) => {
 
 exports.patchReview = (req, res, next) => { 
     console.log(req)
-    
     const { review_id } = req.params;
+}
+
+exports.postComment = (req, res, next) => {
+    const { body } = req
+    const {review_id} = req.params
+    postedComment(body, review_id).then(comment => {
+        res.status(201).send({ comment })
+    }).catch(err => {
+        next(err)
+    })
 }
