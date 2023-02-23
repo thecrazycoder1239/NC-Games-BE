@@ -9,6 +9,8 @@ exports.handles404Errors = (err, req, res, next) => {
         res.status(404).send({ msg: '404: could not find matches in database for your input'})
     } else if (err === 'review id not found') {
         res.status(404).send({ msg: 'review id not found'})
+    } else if (err === 'sort by property not found') { 
+        res.status(404).send({ msg: 'sort by property not found'});
     } else { 
     next(err);
     }

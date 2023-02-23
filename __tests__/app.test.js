@@ -135,6 +135,42 @@ describe('GET /api/reviews', () => {
             })
         });
     });
+    test('returns reviews in a specifc category if specified', () => {
+        return request(app).get('/api/reviews/?category=euro game').expect(200).then(response => {
+            const reviewsByCategory = response.body.reviews;
+            reviewsByCategory.forEach(review => {
+                expect(review).toMatchObject({
+                    owner: expect.any(String),
+                    title: expect.any(String),
+                    review_id: expect.any(Number),
+                    category: 'euro game',
+                    review_img_url: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    comment_count: expect.any(String)
+                })
+            })
+        })
+    });
+    test('returns reviews sorted by a chosen column if specified', () => {
+        return request(app).get('/api/reviews/?sort_by=votes').expect(200).then(response => {
+            const reviewsSortedByVotes = response.body.reviews;
+            expect(reviewsSortedByVotes).toBeSortedBy('votes', {
+                descending: true,
+                coerce: true
+            })
+        })
+    });
+    test('returns reviews ordered descending or ascending if specified', () => {
+        return request(app).get('/api/reviews/?order_by=ASC').expect(200).then(response => {
+            const reviewsSortedByASC = response.body.reviews;
+            const reviewsCopy = [...response.body.reviews]
+            reviewsCopy.sort(function (a , b) {
+                return new Date(a.created_at) - new Date(b.created_at);
+              });
+            expect(reviewsSortedByASC).toEqual(reviewsCopy)
+        })
+    });
 });
 
 describe('PATCH /api/reviews/review_id', () => {
@@ -281,6 +317,11 @@ describe('error handling', () => {
     test('returns a 404 if review_id is not found on a patch', () => {
         return request(app).patch('/api/reviews/999').send({ inc_votes: 1 }).expect(404).then((response) => {
             expect(response.body.msg).toBe('review id not found')
+        })
+    });
+    test('returns a 404 if sort by optional parameter is not in the accepted values', () => {
+        return request(app).get('/api/reviews/?sort_by=banana').expect(404).then((response) => {
+            expect(response.body.msg).toBe('sort by property not found')
         })
     });
 });
