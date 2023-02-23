@@ -11,6 +11,8 @@ exports.handles404Errors = (err, req, res, next) => {
         res.status(404).send({ msg: 'review id not found'})
     } else if (err === 'sort by property not found') { 
         res.status(404).send({ msg: 'sort by property not found'});
+    } else if (err === 'category not found') {
+        res.status(404).send({ msg: 'category not found'})
     } else { 
     next(err);
     }
@@ -23,6 +25,8 @@ exports.handles400Errors = (err, req, res, next) => {
         res.status(400).send({ msg: 'missing required input'})
     } else if(err === 'invalid type of incriment votes') {
         res.status(400).send({ msg: 'invalid type of incriment votes'})
+    } else if(err === 'order by argument not accepted') {
+        res.status(400).send({ msg: 'order by argument invalid'})
     } else {
         next(err);
     }

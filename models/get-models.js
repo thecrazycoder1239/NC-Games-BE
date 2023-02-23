@@ -36,6 +36,8 @@ exports.fetchedReviews = (category, sortBy, orderBy) => {
 
     if(accpetedOrderBy.includes(orderBy)) {
         orderByString += ` ${orderBy}`
+    } else if(orderBy !== undefined) {
+        return Promise.reject('order by argument not accepted')
     } else {
         orderByString += ' DESC'
     }
@@ -43,6 +45,9 @@ exports.fetchedReviews = (category, sortBy, orderBy) => {
     queryString += orderByString;
 
     return db.query(queryString, queryParams).then((response) => {
+        if(response['rows'].length === 0) {
+            return Promise.reject('category not found')
+        }
         return response.rows;
     })
 }

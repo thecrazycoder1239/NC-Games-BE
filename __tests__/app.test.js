@@ -324,4 +324,14 @@ describe('error handling', () => {
             expect(response.body.msg).toBe('sort by property not found')
         })
     });
+    test('returns a 404 if order by optional parameter is not in the accepted values', () => {
+        return request(app).get('/api/reviews/?order_by=banana').expect(400).then((response) => {
+            expect(response.body.msg).toBe('order by argument invalid')
+        })
+    });
+    test('returns a 404 if category optional parameter is not found', () => {
+        return request(app).get('/api/reviews/?category=banana').expect(404).then((response) => {
+            expect(response.body.msg).toBe('category not found')
+        })
+    });
 });
