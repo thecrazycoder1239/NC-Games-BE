@@ -275,6 +275,14 @@ describe('GET /api/users', () => {
     });
 });
 
+describe('DELETE /api/comments/commentid', () => {
+    test('deletes a comment by a given id, returning 204 no content', () => {
+        return request(app).delete('/api/comments/1').expect(204).then(response => {
+             expect(response.noContent).toEqual(true)
+        })
+    });
+});
+
 describe('error handling', () => {
     test('returns 404 if path is not found', () => {
         return request(app).get('/api/notARoute').expect(404).then((response) => {
@@ -341,10 +349,19 @@ describe('error handling', () => {
             expect(response.body.msg).toBe('order by argument invalid')
         })
     });
-    test
-    ('returns a 404 if category optional parameter is not found', () => {
+    test('returns a 404 if category optional parameter is not found', () => {
         return request(app).get('/api/reviews/?category=banana').expect(404).then((response) => {
             expect(response.body.msg).toBe('category not found')
+        })
+    });
+    test('returns a 404 for a comment id that is not found', () => {
+        return request(app).delete('/api/comments/9999').expect(404).then((response) => {
+            expect(response.body.msg).toBe('comment not found')
+        })
+    });
+    test('returns a 400 for an invalid comment id', () => {
+        return request(app).delete('/api/comments/banana').expect(400).then((response) => {
+            expect(response.body.msg).toBe('invalid input')
         })
     });
 });
