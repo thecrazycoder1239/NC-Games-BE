@@ -82,8 +82,7 @@ exports.fetchUsers = (req, res, next) => {
 exports.deleteComment = (req, res, next) => {
     const { comment_id } = req.params
     deletedComment(comment_id).then((response) => {
-        
-        res.status(204).send({msg: 'no content'})
+        res.status(204).send()
     }).catch(err => {
         next(err)
     })
