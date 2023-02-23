@@ -1,4 +1,4 @@
-const { fetchedCategories, fetchedReviews, fetchedComments, fetchedReview, selectReviewsById, postedComment, patchedReview } = require('../models/get-models');
+const { fetchedCategories, fetchedReviews, fetchedComments, fetchedReview, selectReviewsById, postedComment, patchedReview, fetchedUsers } = require('../models/get-models');
 
 exports.fetchCategories = (req, res, next) => {
     fetchedCategories().then(categories => {
@@ -53,6 +53,14 @@ exports.postComment = (req, res, next) => {
     const {review_id} = req.params
     postedComment(body, review_id).then(comment => {
         res.status(201).send({ comment })
+    }).catch(err => {
+        next(err)
+    })
+}
+
+exports.fetchUsers = (req, res, next) => {
+    fetchedUsers().then(users => {
+        res.status(200).send({users})
     }).catch(err => {
         next(err)
     })

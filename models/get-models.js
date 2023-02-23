@@ -72,3 +72,9 @@ exports.patchedReview = (increment, review_id) => {
     })
     }
 }
+
+exports.fetchedUsers = () => {
+    return db.query(`SELECT * FROM users`).then(response => {
+        return response.rows;
+    })
+}
