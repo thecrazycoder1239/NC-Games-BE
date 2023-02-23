@@ -275,6 +275,14 @@ describe('GET /api/users', () => {
     });
 });
 
+describe('DELETE /api/comments/commentid', () => {
+    test('deletes a comment by a given id, returning 204 no content', () => {
+        return request(app).delete('/api/comments/1').expect(204).then(response => {
+             expect(response.noContent).toEqual(true)
+        })
+    });
+});
+
 describe('error handling', () => {
     test('returns 404 if path is not found', () => {
         return request(app).get('/api/notARoute').expect(404).then((response) => {
