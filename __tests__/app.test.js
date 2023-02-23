@@ -211,6 +211,22 @@ describe('POST /api/reviews/:review_id/comments', () => {
     });
 });
 
+describe('GET /api/users', () => {
+    test('returns with users objects', () => {
+        return request(app).get('/api/users').expect(200).then(response => {
+            const arrayOfUsers = response.body.users;
+            arrayOfUsers.forEach(user => {
+                expect(user).toMatchObject({
+                    username: expect.any(String),
+                    name: expect.any(String),
+                    avatar_url: expect.any(String)
+                })
+            })
+            expect(arrayOfUsers).toHaveLength(4)
+        })
+    });
+});
+
 describe('error handling', () => {
     test('returns 404 if path is not found', () => {
         return request(app).get('/api/notARoute').expect(404).then((response) => {
