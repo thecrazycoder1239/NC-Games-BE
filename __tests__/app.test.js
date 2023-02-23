@@ -116,7 +116,6 @@ describe('GET /api/reviews', () => {
                     category: expect.any(String),
                     owner: expect.any(String),
                     created_at: expect.any(String),
-                    comment_count: expect.any(String)
                 })
             })
         });
@@ -132,8 +131,22 @@ describe('GET /api/reviews', () => {
                     review_img_url: 'https://images.pexels.com/photos/4473494/pexels-photo-4473494.jpeg?w=700&h=700',
                     created_at: '2021-01-18T10:01:41.251Z',
                     votes: 5,
-                    comment_count: '3'
                 }})
+            })
+        });
+        test('responds with a specifc object and includes a comment count', () => {
+            return request(app).get('/api/reviews/2').expect(200).then((response) => {
+                expect(response.body.review).toMatchObject({
+                    review_id : 2,
+                    title: expect.any(String),
+                    review_body: expect.any(String),
+                    designer: expect.any(String),
+                    votes: expect.any(Number),
+                    category: expect.any(String),
+                    owner: expect.any(String),
+                    created_at: expect.any(String),
+                    comment_count: '3',
+                })
             })
         });
     });
