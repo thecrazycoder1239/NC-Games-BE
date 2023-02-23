@@ -127,6 +127,9 @@ exports.selectCategoriesBySlug = (category) => {
 
 exports.deletedComment = (commentId) => {
     return db.query(`DELETE FROM comments WHERE comment_id = $1 RETURNING *`, [commentId]).then((response) => {
+        if(response['rows'].length === 0) {
+            return Promise.reject('comment not found')
+        }
         return response.rows[0];
     })
 }

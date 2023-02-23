@@ -349,10 +349,19 @@ describe('error handling', () => {
             expect(response.body.msg).toBe('order by argument invalid')
         })
     });
-    test
-    ('returns a 404 if category optional parameter is not found', () => {
+    test('returns a 404 if category optional parameter is not found', () => {
         return request(app).get('/api/reviews/?category=banana').expect(404).then((response) => {
             expect(response.body.msg).toBe('category not found')
+        })
+    });
+    test('returns a 404 for a comment id that is not found', () => {
+        return request(app).delete('/api/comments/9999').expect(404).then((response) => {
+            expect(response.body.msg).toBe('comment not found')
+        })
+    });
+    test('returns a 400 for an invalid comment id', () => {
+        return request(app).delete('/api/comments/banana').expect(400).then((response) => {
+            expect(response.body.msg).toBe('invalid input')
         })
     });
 });

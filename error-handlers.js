@@ -11,6 +11,8 @@ exports.handles404Errors = (err, req, res, next) => {
         res.status(404).send({ msg: 'review id not found'})
     } else if (err === 'sort by property not found') { 
         res.status(404).send({ msg: 'sort by property not found'});
+    } else if (err === 'comment not found') {
+        res.status(404).send({ msg: 'comment not found'})
     } else if (err === 'category not found') {
         res.status(404).send({ msg: 'category not found'})
     } else { 
