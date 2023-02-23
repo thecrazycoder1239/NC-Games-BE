@@ -171,6 +171,11 @@ describe('GET /api/reviews', () => {
             expect(reviewsSortedByASC).toEqual(reviewsCopy)
         })
     });
+    test('returns a 200 with empty array if the category exists but there are no reviews for it', () => {
+        return request(app).get("/api/reviews/?category=children's games").expect(200).then(response => {
+            expect(response.body.reviews).toEqual([])
+        })
+    });
 });
 
 describe('PATCH /api/reviews/review_id', () => {
@@ -329,7 +334,8 @@ describe('error handling', () => {
             expect(response.body.msg).toBe('order by argument invalid')
         })
     });
-    test('returns a 404 if category optional parameter is not found', () => {
+    test
+    ('returns a 404 if category optional parameter is not found', () => {
         return request(app).get('/api/reviews/?category=banana').expect(404).then((response) => {
             expect(response.body.msg).toBe('category not found')
         })

@@ -1,4 +1,4 @@
-const { fetchedCategories, fetchedReviews, fetchedComments, fetchedReview, selectReviewsById, postedComment, patchedReview, fetchedUsers } = require('../models/get-models');
+const { fetchedCategories, fetchedReviews, fetchedComments, fetchedReview, selectReviewsById, postedComment, patchedReview, fetchedUsers, selectCategoriesBySlug } = require('../models/get-models');
 
 exports.fetchCategories = (req, res, next) => {
     fetchedCategories().then(categories => {
@@ -12,11 +12,21 @@ exports.fetchReviews = (req, res, next) => {
     const category = req.query.category
     const sortBy = req.query.sort_by
     const orderBy = req.query.order_by
-    fetchedReviews(category, sortBy, orderBy).then(reviews => {
-        res.status(200).send({ reviews });
-    }).catch(err => {
-        next(err);
-    })
+    if (category !== undefined) {
+        const categoriesPromise = selectCategoriesBySlug(category)
+        const reviewsPromise = fetchedReviews(category, sortBy, orderBy)
+        Promise.all([reviewsPromise, categoriesPromise]).then(([reviews]) => {
+            res.status(200).send({ reviews });
+        }).catch(err => {
+            next(err);
+        })
+    } else {
+        fetchedReviews(category, sortBy, orderBy).then(reviews => {
+            res.status(200).send({ reviews });
+        }).catch(err => {
+            next(err);
+        })
+    }
 }
 
 exports.fetchComments = (req, res, next) => {

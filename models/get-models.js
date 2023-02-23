@@ -45,9 +45,6 @@ exports.fetchedReviews = (category, sortBy, orderBy) => {
     queryString += orderByString;
 
     return db.query(queryString, queryParams).then((response) => {
-        if(response['rows'].length === 0) {
-            return Promise.reject('category not found')
-        }
         return response.rows;
     })
 }
@@ -115,5 +112,15 @@ exports.patchedReview = (increment, review_id) => {
 exports.fetchedUsers = () => {
     return db.query(`SELECT * FROM users`).then(response => {
         return response.rows;
+    })
+}
+
+exports.selectCategoriesBySlug = (category) => {
+    return db.query(`SELECT * FROM categories WHERE slug = $1`, [category]).then(response => {
+        if(response['rows'].length === 0) {
+            return Promise.reject('category not found')
+        } else {
+            return response.rows
+        }
     })
 }
