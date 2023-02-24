@@ -1,4 +1,5 @@
 const db = require('../db/connection');
+const fs = require('fs/promises')
 
 
 exports.fetchedCategories = () => {
@@ -131,5 +132,13 @@ exports.deletedComment = (commentId) => {
             return Promise.reject('comment not found')
         }
         return response.rows[0];
+    })
+}
+
+exports.fetchedApi = () => {
+    const filePath = `${__dirname}/../endpoints.json` 
+    return fs.readFile(filePath, { encoding: 'utf8' }).then(response => {
+        const parsedResponse = JSON.parse(response);
+        return parsedResponse
     })
 }
