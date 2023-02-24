@@ -1,14 +1,49 @@
 # Northcoders House of Games API
 
+## Overview
+
 Hello there, weary traveller!
 
-You have arrived at the repository of my first backend project, the House of Games API. In this project I seed a database with data about board games and create an express application with endpoints that access this PostgresQL database. I used a TDD approach for my endpoints, as well as my error handling, with the aid of supertest. Please check out the link below to my hosted application...
+  You have arrived at the repository of my first backend
+project, the House of Games API. In this Northcoders project I built an api that accesses board games data in a PostgresQL database. I used a TDD approach for my api endpoints, as well as my error handling. I intend to use this backend service to provide relevant data to my front end architecture.
+
+Please check out the link below to my **hosted application**...
+
+🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻
 
 https://my-board-game-database.onrender.com/api
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺
 
-If you would like to clone this repository, feel free to do so! Once you have done this, please run 'npm i' in your terminal in order to install the relevant dependencies, and check out the json.package scripts for info on seeding and running tests (you can ignore 'seed-prod').
+## Setup
 
-You must also create a .env.development file setting PGDATABASE=nc_games, and a .env.test file setting PGDATABASE=nc_games_test, in order to successfully connect the two databases locally. 
+    1) Fork this repo to your GitHub account
 
+    2) Clone your copy locally using git clone <your-repo-url> in a directory of your choosing
+
+    3) create a `.env.development`file setting PGDATABASE=nc_games. Then create a `.env.test` file setting PGDATABASE=nc_games_test. This will connect the test and development databases locally. 
+
+    4) install dependencies using `npm i`
+
+    5) drop / create your local database by running `npm run setup-dbs` 
+
+    6) seed the databse wih npm `npm run seed`
+
+*NB: to run tests use `npm run test <(optional) file.test.js>`*
+
+## Minimum Requirements
+
+* Node.js `v18.12`
+* Postgres `15.1`
+
+## Technologies
+
+* PSQL
+* JS / node-postgres
+* express
+* dotenv
+* jest, jest-sorted and supertest
+* Git and GitHub
+* Command Line
+* ElephantSQL
+* Render
