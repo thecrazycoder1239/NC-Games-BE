@@ -283,6 +283,25 @@ describe('DELETE /api/comments/commentid', () => {
     });
 });
 
+describe('GET /api', () => {
+    test('returns with json of all available endpoints', () => {
+        return request(app).get('/api').expect(200).then(response => {
+            const endpoints = response.body.endpoints;
+            expect(Object.keys(endpoints)).toEqual([
+                "GET /api",
+                "GET /api/categories",
+                "GET /api/reviews",
+                "GET /api/reviews/:review_id/comments",
+                "GET /api/reviews/:review_id",
+                "GET /api/users",
+                "POST /api/reviews/:review_id/comments",
+                "PATCH /api/reviews/:review_id",
+                "DELETE /api/comments/:comment_id"
+            ])
+       })
+    });
+});
+
 describe('error handling', () => {
     test('returns 404 if path is not found', () => {
         return request(app).get('/api/notARoute').expect(404).then((response) => {
