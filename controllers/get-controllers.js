@@ -1,4 +1,5 @@
 const { fetchedCategories, fetchedReviews, fetchedComments, fetchedReview, selectReviewsById, postedComment, patchedReview, fetchedUsers, selectCategoriesBySlug, deletedComment, fetchedApi } = require('../models/get-models');
+const json = require('../endpoints.json')
 
 exports.fetchCategories = (req, res, next) => {
     fetchedCategories().then(categories => {
@@ -89,9 +90,5 @@ exports.deleteComment = (req, res, next) => {
 }
 
 exports.fetchApi = (req, res, next) => {
-    fetchedApi().then(endpoints => {
-        res.status(200).send({endpoints})
-    }).catch(err => {
-        next(err)
-    })
+    res.status(200).send({endpoints: json})
 }
