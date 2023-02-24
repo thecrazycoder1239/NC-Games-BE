@@ -106,7 +106,7 @@
     }
     }
   },
-  "DELETE /api/comments/:comment_id" {
+  "DELETE /api/comments/:comment_id": {
     "description": "deletes a comment with the specified comment id",
     "queries": [],
     "statusCode": 204
