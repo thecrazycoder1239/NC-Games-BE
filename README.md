@@ -21,9 +21,9 @@ https://my-board-game-database.onrender.com/api
 
     2) Clone your copy locally using git clone <your-repo-url> in a directory of your choosing
 
-    3) Create a .env.development file setting PGDATABASE=nc_games.
+    3) Create a .env.development file setting PGDATABASE=nc_games
     
-    4) Create a .env.test file setting PGDATABASE=nc_games_test. 
+    4) Create a .env.test file setting PGDATABASE=nc_games_test 
 
     5) Install dependencies using 'npm i'
 
