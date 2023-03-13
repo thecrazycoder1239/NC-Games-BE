@@ -2,6 +2,9 @@ const express = require('express');
 const app = express();
 const { fetchCategories, fetchReviews, fetchReview, postComment, fetchComments, patchReview, fetchUsers, deleteComment, fetchApi } = require('./controllers/get-controllers');
 const { handlesServerErrors, handlesInvalidPath, handles404Errors, handles400Errors } = require('./error-handlers');
+const cors = require('cors');
+
+app.use(cors());
 
 app.use(express.json());
 
