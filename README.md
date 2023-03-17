@@ -5,7 +5,7 @@
 Hello there, weary traveller!
 
   You have arrived at the repository of my first backend
-project, the House of Games API. In this Northcoders project I built an api that accesses board games data in a PostgresQL database. I used a TDD approach for my api endpoints, as well as my error handling. I intend to use this backend service to provide relevant data to my front end architecture.
+project, the House of Games API. In this Northcoders project I built an api that accesses board games data in a PostgresQL database. I used a TDD approach for my api endpoints, as well as my error handling. I have used this backend service to provide relevant data to my front end architecture (https://github.com/thecrazycoder1239/NC-Games-FE).
 
 Please check out the link below to my **hosted application**...
 
